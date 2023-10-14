@@ -61,6 +61,7 @@ class StoryList {
 
     // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
+    console.log(stories[0]);
 
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
@@ -73,8 +74,21 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory( currentUser, newStory ) {
     // UNIMPLEMENTED: complete this function!
+    const userToken = currentUser.loginToken;
+    // console.log(userToken);
+    const response = await axios({
+      url: `${BASE_URL}/stories`,
+      method: "POST",
+      data: {
+        token: userToken,
+        story: newStory
+      }
+    })
+
+    console.log(response);
+    return new Story(response.data);
   }
 }
 

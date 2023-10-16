@@ -24,8 +24,8 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    const url = new URL(this.url);
+    return url.hostname;
   }
 }
 
@@ -74,7 +74,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( currentUser, newStory ) {
+  static async addStory( currentUser, newStory ) {
     // UNIMPLEMENTED: complete this function!
     const userToken = currentUser.loginToken;
     // console.log(userToken);
@@ -206,5 +206,36 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  /** Favorite and unfavorite stories. Favorite status should persist even if 
+   * page is refreshed. Requires username of target user and storyId of 
+   * target story
+   */
+
+
+  
+  async addFavorite( story ){
+    this.favorites.push(story);
+    console.log(this.favorites);
+
+    await this.addOrRemoveFav( "add", story );
+
+  }
+  async removeFavorite( story ){
+    this.favorites.filter( s => s.storyId === story.storyId);
+
+    await this.addOrRemoveFav( "remove", story);
+
+  }
+  async addOrRemoveFav( state, story ){
+    console.debug("addOrRemoveFav");
+    const method = state === "add" ? "POST" : "DELETE";
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: method,
+      params: { token }
+    });
   }
 }

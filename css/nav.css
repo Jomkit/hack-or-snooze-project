@@ -17,6 +17,9 @@ nav {
   margin: 0 3px;
 }
 
+.main-nav-links{
+  text-align: left;
+}
 .nav-right {
   margin-left: auto;
   text-align: right;

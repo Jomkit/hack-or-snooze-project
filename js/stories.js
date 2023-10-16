@@ -6,6 +6,7 @@ let storyList;
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
+  console.debug("getAndShowStoriesOnStart");
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
 
@@ -20,7 +21,7 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
@@ -50,3 +51,29 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** Gets story from submit-story-form and put it on the page */
+async function submitNewStory(evt){
+  console.debug("submitNewStory");
+  evt.preventDefault;
+
+  const newStory = {
+    title: $("#story-title").val(),
+    author: $("#story-author").val(),
+    url: $("#story-url").val()
+  }
+  console.log(newStory);
+  //new instance of a story object, added to currentUser
+  let userStory = await storyList.addStory( currentUser, newStory );
+  
+  const $story = generateStoryMarkup(userStory);
+  $allStoriesList.prepend($story);
+
+  currentUser.ownStories.push(userStory);
+  console.log(currentUser.ownStories);
+
+  hidePageComponents();
+  getAndShowStoriesOnStart();
+}
+
+$submitStoryForm.on('submit',submitNewStory); 

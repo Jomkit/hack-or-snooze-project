@@ -16,16 +16,27 @@ async function getAndShowStoriesOnStart() {
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
+ * 10/17/23 - markup dynamically decides favIcon
  *
  * Returns the markup for the story.
  */
 
 function generateStoryMarkup(story) {
 
+  console.log(story);
   const hostName = story.getHostName();
+  let favIds = [];
+  let favState;
+  let favTag ="";
+  if(currentUser){
+    favIds = User.ownFavorites( currentUser );
+    favState = favIds.includes(story.storyId) ? "fa-solid" : "fa-regular";
+    favTag = `<i class="${favState} fa-star"></i>`;
+  }
+
   return $(`
       <li id="${story.storyId}">
-        <i class="fa-regular fa-star"></i>
+        ${favTag}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -62,15 +73,15 @@ async function submitNewStory(evt){
     author: $("#story-author").val(),
     url: $("#story-url").val()
   }
-  console.log(newStory);
   //new instance of a story object, added to currentUser
   let userStory = await storyList.addStory( currentUser, newStory );
+  console.log("user Story: ");
+  console.log(userStory);
   
   const $story = generateStoryMarkup(userStory);
   $allStoriesList.prepend($story);
 
   currentUser.ownStories.push(userStory);
-  console.log(currentUser.ownStories);
 
   hidePageComponents();
   getAndShowStoriesOnStart();
@@ -81,12 +92,17 @@ $submitStoryForm.on('submit',submitNewStory);
 /** update "favorite" icon in the story stream from outline (not favorited) 
  * to solid (favorited)
  */
-function toggleFavorite(evt){
+async function toggleFavorite(evt){
   console.debug("toggleFavorite");
-  const favState = $(evt.target);
+  const favTarget = $(evt.target);
+  const favStory = storyList.stories.filter( s => s.storyId == favTarget.parent().attr("Id"))[0];
   
-  favState.toggleClass("fa-regular");
-  favState.toggleClass("fa-solid");
+
+  // console.log($(evt.target).parent().attr("id"));
+  favTarget.hasClass("fa-regular") ? await currentUser.addFavorite( favStory ) : await currentUser.removeFavorite( favStory );
+  
+  favTarget.toggleClass("fa-regular");
+  favTarget.toggleClass("fa-solid");
 }
 
 $allStoriesList.on("click", "i", toggleFavorite);

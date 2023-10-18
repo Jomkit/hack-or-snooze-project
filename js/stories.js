@@ -123,11 +123,3 @@ async function toggleFavorite(evt){
 }
 
 $allStoriesList.on("click", "i", toggleFavorite);
-
-/** Remove all favorites */
-async function removeAllFavorites(){
-  console.debug("removeAllFavorites");
-  
-  await User.removeAllFav(currentUser);
-  currentUser.favorites = 0;
-}

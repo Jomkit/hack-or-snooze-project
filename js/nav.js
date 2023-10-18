@@ -19,8 +19,6 @@ function favStories(evt){
   console.debug("favStories", evt);
   hidePageComponents();
   putFavoritesOnPage();
-  $("#all-stories-list").prepend("<small><a href='#' id='removeAllFav'>(remove all)</a></small>");
-  $("#removeAllFav").on("click", removeAllFavorites);
 }
 $body.on("click", "#favorites", favStories)
 

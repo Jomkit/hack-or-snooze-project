@@ -249,19 +249,4 @@ class User {
     }
     return favIds = currentUser.favorites.map( fav => fav.storyId);
   }
-
-  static async removeAllFav(currentUser){
-    console.debug("RemoveAllFav");
-    const token = this.loginToken;
-    const favIds = User.ownFavorites( currentUser );
-    await favIds.forEach((id) => async function() {
-      const response = await axios({
-        url: `${BASE_URL}/users/${this.username}/favorites/${id}`,
-        method: "DELETE",
-        params: { token }
-      })
-      console.log(response);
-    })
-    
-  }
 }

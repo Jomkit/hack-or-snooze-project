@@ -24,8 +24,6 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    console.log("inside gethostname");
-    console.log(this);
     const url = new URL(this.url);
     return url.hostname;
   }
@@ -224,7 +222,9 @@ class User {
   }
   async removeFavorite( story ){
     console.debug("removeFavorite");
-    this.favorites.filter( s => s.storyId !== story.storyId);
+
+    this.favorites = this.favorites.filter( s => s.storyId !== story.storyId);
+
 
     await this.addOrRemoveFav( "remove", story);
 
@@ -232,6 +232,7 @@ class User {
   async addOrRemoveFav( state, story ){
     console.debug("addOrRemoveFav");
     const method = state === "add" ? "POST" : "DELETE";
+    console.log("method is: " + method);
     const token = this.loginToken;
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
@@ -239,13 +240,28 @@ class User {
       params: { token }
     });
   }
+  
   //Check current favorites and return their ids
   static ownFavorites(currentUser){
     let favIds = [];
     if(currentUser.favorites.length === 0) {
       return favIds;
     }
-    favIds = currentUser.favorites.map( fav => fav.storyId);
-    return favIds;
+    return favIds = currentUser.favorites.map( fav => fav.storyId);
+  }
+
+  static async removeAllFav(currentUser){
+    console.debug("RemoveAllFav");
+    const token = this.loginToken;
+    const favIds = User.ownFavorites( currentUser );
+    await favIds.forEach((id) => async function() {
+      const response = await axios({
+        url: `${BASE_URL}/users/${this.username}/favorites/${id}`,
+        method: "DELETE",
+        params: { token }
+      })
+      console.log(response);
+    })
+    
   }
 }

@@ -14,6 +14,16 @@ function navAllStories(evt) {
 
 $body.on("click", "#nav-all", navAllStories);
 
+//show list of all favorited stories when clicking "favorites"
+function favStories(evt){
+  console.debug("favStories", evt);
+  hidePageComponents();
+  putFavoritesOnPage();
+  $("#all-stories-list").prepend("<small><a href='#' id='removeAllFav'>(remove all)</a></small>");
+  $("#removeAllFav").on("click", removeAllFavorites);
+}
+$body.on("click", "#favorites", favStories)
+
 /** Show submit form */
 function submitStoryClick(evt) {
   console.debug("submitStoryClick", evt);

@@ -22,8 +22,6 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-
-  console.log(story);
   const hostName = story.getHostName();
   let favIds = [];
   let favState;
@@ -62,6 +60,24 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+/** Gets list of favorite stories from server, generates their HTML, and puts on page. */
+
+function putFavoritesOnPage() {
+  console.debug("putFavoritesOnPage");
+
+  $allStoriesList.empty();
+
+  // loop through all of our stories and generate HTML for them
+  if(currentUser.favorites.length === 0){
+    $allStoriesList.append("<h3>No Favorited Stories!</h3>");
+  }
+  for (let story of currentUser.favorites) {
+    const $story = generateStoryMarkup(story);
+    $allStoriesList.append($story);
+  }
+
+  $allStoriesList.show();
+}
 
 /** Gets story from submit-story-form and put it on the page */
 async function submitNewStory(evt){
@@ -75,9 +91,7 @@ async function submitNewStory(evt){
   }
   //new instance of a story object, added to currentUser
   let userStory = await storyList.addStory( currentUser, newStory );
-  console.log("user Story: ");
-  console.log(userStory);
-  
+    
   const $story = generateStoryMarkup(userStory);
   $allStoriesList.prepend($story);
 
@@ -85,6 +99,9 @@ async function submitNewStory(evt){
 
   hidePageComponents();
   getAndShowStoriesOnStart();
+  $("#story-title").val("");
+  $("#story-author").val("");
+  $("#story-url").val("");  
 }
 
 $submitStoryForm.on('submit',submitNewStory); 
@@ -106,3 +123,11 @@ async function toggleFavorite(evt){
 }
 
 $allStoriesList.on("click", "i", toggleFavorite);
+
+/** Remove all favorites */
+async function removeAllFavorites(){
+  console.debug("removeAllFavorites");
+  
+  await User.removeAllFav(currentUser);
+  currentUser.favorites = 0;
+}

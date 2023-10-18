@@ -224,7 +224,7 @@ class User {
   }
   async removeFavorite( story ){
     console.debug("removeFavorite");
-    this.favorites.filter( s => s.storyId === story.storyId);
+    this.favorites.filter( s => s.storyId !== story.storyId);
 
     await this.addOrRemoveFav( "remove", story);
 

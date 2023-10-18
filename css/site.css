@@ -29,6 +29,9 @@ a:hover {
   text-decoration: underline;
 }
 
+hr {
+  border: 1px solid lightgray;
+}
 
 /* Site layout */
 

@@ -29,7 +29,7 @@ function generateStoryMarkup(story) {
   if(currentUser){
     favIds = User.ownFavorites( currentUser );
     favState = favIds.includes(story.storyId) ? "fa-solid" : "fa-regular";
-    favTag = `<i class="${favState} fa-star"></i>`;
+    favTag = `<i class="${favState} fa-star" id="favorite-icon"></i>`;
   }
 
   return $(`
@@ -42,6 +42,7 @@ function generateStoryMarkup(story) {
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
+      <hr>
     `);
 }
 
@@ -78,6 +79,40 @@ function putFavoritesOnPage() {
 
   $allStoriesList.show();
 }
+/** Gets list of my stories from server, generates their HTML, and puts on page. 
+ * Stories should have trash icon and functionality to remove
+*/
+
+function putMyStoriesOnPage() {
+  console.debug("putMyStoriesOnPage");
+  $allStoriesList.empty();
+  
+  const removeIcon = `<i class="fa-solid fa-trash" id="rmv-icon"></i>`;
+
+  // loop through all of our stories and generate HTML for them
+  if(currentUser.ownStories.length === 0){
+    $allStoriesList.append("<h3>No Stories Submitted!</h3>");
+  }
+
+  for (let story of currentUser.ownStories) {
+    const $story = generateStoryMarkup(story);
+    $allStoriesList.append($story);
+    
+  }
+  $(".story-hostname").after(removeIcon);
+  $allStoriesList.show();
+}
+
+async function getStoryAndRemove(evt){
+  console.debug("getStoryAndRemove", evt); 
+  const storyId = $(evt.target).parent().attr("id");
+  const removedStory = await storyList.removeStory(currentUser, storyId);
+  
+  //below removes the user's story in the DOM
+  currentUser.ownStories = currentUser.ownStories.filter(id => id === removedStory.storyId);
+  $(`#${removedStory.storyId}`).remove();
+}
+$allStoriesList.on("click", "#rmv-icon", getStoryAndRemove);
 
 /** Gets story from submit-story-form and put it on the page */
 async function submitNewStory(evt){
@@ -104,7 +139,7 @@ async function submitNewStory(evt){
   $("#story-url").val("");  
 }
 
-$submitStoryForm.on('submit',submitNewStory); 
+$submitStoryForm.on('submit', submitNewStory); 
 
 /** update "favorite" icon in the story stream from outline (not favorited) 
  * to solid (favorited)
@@ -122,4 +157,4 @@ async function toggleFavorite(evt){
   favTarget.toggleClass("fa-solid");
 }
 
-$allStoriesList.on("click", "i", toggleFavorite);
+$allStoriesList.on("click", "#favorite-icon", toggleFavorite);

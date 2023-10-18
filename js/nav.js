@@ -22,6 +22,14 @@ function favStories(evt){
 }
 $body.on("click", "#favorites", favStories)
 
+//show list of all favorited stories when clicking "favorites"
+function myStories(evt){
+  console.debug("myStories", evt);
+  hidePageComponents();
+  putMyStoriesOnPage();
+}
+$body.on("click", "#my-stories", myStories)
+
 /** Show submit form */
 function submitStoryClick(evt) {
   console.debug("submitStoryClick", evt);

@@ -16,13 +16,27 @@
   margin: 20px 30px;
 }
 
+/* Remove icon on my Stories page */
+
+#rmv-icon {
+  margin-left: 5px;
+}
+
+#rmv-icon:hover {
+  color: crimson;
+  font-size: 1rem;
+  cursor: pointer;
+}
 
 /* Individual stories */
 
+.fa-star:hover {
+  cursor: pointer;
+}
 .story-link {
   color: black;
   font-size: 0.85rem;
-  font-weight: normal;
+  font-weight: bold;
   margin: 18px 0;
 }
 
@@ -31,9 +45,16 @@
 }
 
 .story-author {
-  margin-left: 2em;
+  margin: 5px 1.5em;
+  display: block;
+  font-size: small;
+  font-weight: bold;  
+  color: green;
 }
 
 .story-user {
+  font-size: small;
   display: block;
+  margin-left: 1.5em;
+  color: orange;
 }

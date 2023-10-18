@@ -88,7 +88,33 @@ class StoryList {
     })
     return new Story(response.data.story);
   }
+
+  /** make a request to the server to delete a current user's story
+   * Requires token, and user's story's storyId
+   */
+  async removeStory( currentUser, storyId ){
+    console.debug("removeStory");
+    const token = currentUser.loginToken;
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      params: { token }
+    });
+    return response.data.story;
+  }
 }
+
+// async addOrRemoveFav( state, story ){
+//   console.debug("addOrRemoveFav");
+//   const method = state === "add" ? "POST" : "DELETE";
+//   console.log("method is: " + method);
+//   const token = this.loginToken;
+//   await axios({
+//     url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+//     method: method,
+//     params: { token }
+//   });
+// }
 
 
 /******************************************************************************

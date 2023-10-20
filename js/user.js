@@ -19,7 +19,15 @@ async function login(evt) {
 
   // User.login retrieves user info from API and returns User instance
   // which we'll make the globally-available, logged-in user.
+  // If credentials are incorrect, will prompt an alert with message
   currentUser = await User.login(username, password);
+  if(!(currentUser instanceof User)){
+    alert(currentUser);
+    $("#login-form input").val("");
+    return;
+  }
+
+  
 
   $loginForm.trigger("reset");
 
@@ -29,7 +37,10 @@ async function login(evt) {
 
 $loginForm.on("submit", login);
 
-/** Handle signup form submission. */
+/** Handle signup form submission.
+ * Should have error handling for instances
+ * where username is taken or credentials are wrong
+ */
 
 async function signup(evt) {
   console.debug("signup", evt);
@@ -39,9 +50,17 @@ async function signup(evt) {
   const username = $("#signup-username").val();
   const password = $("#signup-password").val();
 
+  //Get a list of usernames, then compare to see if the new user is the same
+
   // User.signup retrieves user info from API and returns User instance
   // which we'll make the globally-available, logged-in user.
+  // Will also return a message if usersname is already taken
   currentUser = await User.signup(username, password, name);
+  if(!(currentUser instanceof User)){
+    alert(currentUser);
+    $("#signup-username").val("");
+    return;
+  }
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();

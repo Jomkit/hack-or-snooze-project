@@ -26,7 +26,7 @@ function generateStoryMarkup(story) {
   let favIds = [];
   let favState;
   let favTag ="";
-  if(currentUser){
+  if(currentUser instanceof User){
     favIds = User.ownFavorites( currentUser );
     favState = favIds.includes(story.storyId) ? "fa-solid" : "fa-regular";
     favTag = `<i class="${favState} fa-star" id="favorite-icon"></i>`;

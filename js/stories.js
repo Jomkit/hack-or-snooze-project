@@ -22,7 +22,7 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  const hostName = story.getHostName();
+  const hostName = story.getHostName(); 
   let favIds = [];
   let favState;
   let favTag ="";
@@ -88,6 +88,7 @@ function putMyStoriesOnPage() {
   $allStoriesList.empty();
   
   const removeIcon = `<i class="fa-solid fa-trash" id="rmv-icon"></i>`;
+  const editIcon = `<i class="fa-solid fa-file-pen" id="edit-icon"></i>`;
 
   // loop through all of our stories and generate HTML for them
   if(currentUser.ownStories.length === 0){
@@ -100,6 +101,7 @@ function putMyStoriesOnPage() {
     
   }
   $(".story-hostname").after(removeIcon);
+  $("#favorite-icon").after(editIcon);
   $allStoriesList.show();
 }
 
@@ -149,8 +151,6 @@ async function toggleFavorite(evt){
   const favTarget = $(evt.target);
   const favStory = storyList.stories.filter( s => s.storyId == favTarget.parent().attr("Id"))[0];
   
-
-  // console.log($(evt.target).parent().attr("id"));
   favTarget.hasClass("fa-regular") ? await currentUser.addFavorite( favStory ) : await currentUser.removeFavorite( favStory );
   
   favTarget.toggleClass("fa-regular");
@@ -158,3 +158,42 @@ async function toggleFavorite(evt){
 }
 
 $allStoriesList.on("click", "#favorite-icon", toggleFavorite);
+
+/** Show edit form */
+function editStoryBtn(evt) {
+  console.debug("editStoryBtn", evt);
+  // hidePageComponents();
+  const editForm = `<form action="#" id="edit-story-form" class="account-form">
+  <h4>Edit a Story</h4>
+  <div class="story-input">
+    <label for="story-author">Author</label>
+    <input id="story-author" placeholder="author name">
+  </div>
+  <div class="story-input">
+    <label for="story-title">Title</label>
+    <input id="story-title" type="text" placeholder="story title">
+  </div>
+  <div class="story-input">
+    <label for="story-url">Url</label>
+    <input id="story-url" type="url" placeholder="story url">
+  </div>
+  <button type="submit">Submit</button>
+  <hr>
+  </form>`;
+  $(evt.target).parent().append(editForm);
+}
+
+$allStoriesList.on("click", "#edit-icon", editStoryBtn);
+
+/** Update user's own stories with new author, title, or url */
+async function editOwnStory( evt ){
+  console.debug("EditOwnStory");
+  const storyId = $(evt.target).parent().attr("id");
+  const updatedAuthor = $("#story-author").val();
+  const updatedTitle = $("#story-title").val();
+  const updatedUrl = $("#story-url").val();
+  const res = await currentUser.updateStory(storyId, updatedAuthor);
+  console.log(res);
+}
+
+$allStoriesList.on("submit", editOwnStory);

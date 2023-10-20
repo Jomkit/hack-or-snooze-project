@@ -22,7 +22,7 @@ function favStories(evt){
 }
 $body.on("click", "#favorites", favStories)
 
-//show list of all favorited stories when clicking "favorites"
+//show list of all user's stories when clicking "my stories"
 function myStories(evt){
   console.debug("myStories", evt);
   hidePageComponents();

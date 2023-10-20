@@ -24,7 +24,16 @@
 
 #rmv-icon:hover {
   color: crimson;
-  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* edit icon on my stories page */
+#edit-icon {
+  margin-left: 5px;
+}
+
+#edit-icon:hover {
+  color: green;
   cursor: pointer;
 }
 

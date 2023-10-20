@@ -271,7 +271,6 @@ class User {
   async addOrRemoveFav( state, story ){
     console.debug("addOrRemoveFav");
     const method = state === "add" ? "POST" : "DELETE";
-    console.log("method is: " + method);
     const token = this.loginToken;
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
@@ -287,5 +286,28 @@ class User {
       return favIds;
     }
     return favIds = currentUser.favorites.map( fav => fav.storyId);
+  }
+
+  // Update user's own stories
+  // Need User's token and the target storyId
+  async updateStory( storyId, ...updatedFields ){
+    console.debug("updateStory");
+
+    const token = this.loginToken;
+    console.log(updatedFields[0]);
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'PATCH',
+      data: {
+        token: token,
+        story: {
+          author: updatedFields[0],
+          // title: updatedTitle,
+          // url: updatedUrl
+        }
+      }
+    });
+    return response.data;
+
   }
 }

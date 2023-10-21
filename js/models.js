@@ -290,24 +290,25 @@ class User {
 
   // Update user's own stories
   // Need User's token and the target storyId
-  async updateStory( storyId, ...updatedFields ){
-    console.debug("updateStory");
+//   async updateStory( storyId, ...updatedFields ){
+//     console.debug("updateStory");
 
-    const token = this.loginToken;
-    console.log(updatedFields[0]);
-    const response = await axios({
-      url: `${BASE_URL}/stories/${storyId}`,
-      method: 'PATCH',
-      data: {
-        token: token,
-        story: {
-          author: updatedFields[0],
-          // title: updatedTitle,
-          // url: updatedUrl
-        }
-      }
-    });
-    return response.data;
+//     const token = this.loginToken;
+//     console.log(updatedFields[0]);
+//     const response = await axios({
+//       url: `${BASE_URL}/stories/${storyId}`,
+//       method: 'PATCH',
+//       data: {
+//         token: token,
+//         story: {
+//           author: updatedFields[0],
+//           // title: updatedTitle,
+//           // url: updatedUrl
+//         }
+//       }
+//     });
+//     console.log(response);
+//     return response.data;
 
-  }
+//   }
 }

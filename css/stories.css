@@ -28,11 +28,11 @@
 }
 
 /* edit icon on my stories page */
-#edit-icon {
+.edit-icon {
   margin-left: 5px;
 }
 
-#edit-icon:hover {
+.edit-icon:hover {
   color: green;
   cursor: pointer;
 }

@@ -99,10 +99,10 @@ function putMyStoriesOnPage() {
   }
     
   const removeIcon = `<i class="fa-solid fa-trash" id="rmv-icon"></i>`;
-  // const editIcon = `<i class="fa-solid fa-file-pen edit-icon"></i>`;
+  const editIcon = `<i class="fa-solid fa-file-pen edit-icon"></i>`;
 
   $(".story-hostname").after(removeIcon);
-  // $("li").prepend(editIcon);
+  $("li").prepend(editIcon);
   $allStoriesList.show();
 }
 
@@ -161,54 +161,54 @@ async function toggleFavorite(evt){
 $allStoriesList.on("click", "#favorite-icon", toggleFavorite);
 
 /********************* WIP EDIT FUNCTION **********************/
-// /** Show edit form */
-// function showEditForm(evt) {
-//   console.debug("showEditForm", evt);
-//   // hidePageComponents();
-//   const editForm = `<form action="#" id="edit-story-form" class="account-form">
-//   <h4>Edit a Story</h4>
-//   <div class="story-input">
-//     <label for="story-author">Author</label>
-//     <input id="story-author" placeholder="author name">
-//   </div>
-//   <div class="story-input">
-//     <label for="story-title">Title</label>
-//     <input id="story-title" type="text" placeholder="story title">
-//   </div>
-//   <div class="story-input">
-//     <label for="story-url">Url</label>
-//     <input id="story-url" type="url" placeholder="story url">
-//   </div>
-//   <button type="submit">Submit</button>
-//   <hr>
-//   </form>`;
-//   $(evt.target).parent().append(editForm);
-// }
+/** Show edit form */
+function showEditForm(evt) {
+  console.debug("showEditForm", evt);
+  // hidePageComponents();
+  const editForm = `<form action="#" id="edit-story-form" class="account-form">
+  <h4>Edit a Story</h4>
+  <div class="story-input">
+    <label for="story-author">Author</label>
+    <input id="story-author" placeholder="author name">
+  </div>
+  <div class="story-input">
+    <label for="story-title">Title</label>
+    <input id="story-title" type="text" placeholder="story title">
+  </div>
+  <div class="story-input">
+    <label for="story-url">Url</label>
+    <input id="story-url" type="url" placeholder="story url">
+  </div>
+  <button type="submit">Submit</button>
+  <hr>
+  </form>`;
+  $(evt.target).parent().append(editForm);
+}
 
-// $allStoriesList.on("click", ".edit-icon", showEditForm);
+$allStoriesList.on("click", ".edit-icon", showEditForm);
 
-// /** Update user's own stories with new author, title, or url */
-// async function editOwnStory( evt ){
-//   console.debug("EditOwnStory");
-//   const storyId = $(evt.target).parent().attr("id");
-//   const updatedAuthor = $("#story-author").val();
-//   const updatedTitle = $("#story-title").val();
-//   const updatedUrl = $("#story-url").val();
+/** Update user's own stories with new author, title, or url */
+async function editOwnStory( evt ){
+  console.debug("EditOwnStory");
+  const storyId = $(evt.target).parent().attr("id");
+  const updatedAuthor = $("#story-author").val();
+  const updatedTitle = $("#story-title").val();
+  const updatedUrl = $("#story-url").val();
 
-//   const edittedStory = await currentUser.updateStory(storyId, updatedAuthor);
-//   console.log(edittedStory.story.storyId);
+  const edittedStory = await currentUser.updateStory(storyId, updatedAuthor);
+  console.log(edittedStory.story.storyId);
 
-//   for(let i = 0; i <= currentUser.ownStories.length; i++){
-//     if(currentUser.ownStories[i].storyId == edittedStory.story.storyId){
-//       console.log(i);
-//       currentUser.ownStories[i] = edittedStory;
-//       break;
-//     }
+  for(let i = 0; i <= currentUser.ownStories.length; i++){
+    if(currentUser.ownStories[i].storyId == edittedStory.story.storyId){
+      console.log(i);
+      currentUser.ownStories[i] = edittedStory;
+      break;
+    }
     
-//   }
-//   //temporarily update field directly my stories
-//   $(evt.target).parent().children("small .story-author").val("updatedAuthor"); 
+  }
+  //temporarily update field directly my stories
+  $(evt.target).parent().children("small .story-author").val("updatedAuthor"); 
 
-// }
+}
 
-// $allStoriesList.on("submit", editOwnStory);
+$allStoriesList.on("submit", editOwnStory);

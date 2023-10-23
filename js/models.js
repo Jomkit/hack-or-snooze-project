@@ -290,25 +290,37 @@ class User {
 
   // Update user's own stories
   // Need User's token and the target storyId
-//   async updateStory( storyId, ...updatedFields ){
-//     console.debug("updateStory");
+  async updateStory( storyId, ...updatedFields ){
+    console.debug("updateStory", updatedFields);
 
-//     const token = this.loginToken;
-//     console.log(updatedFields[0]);
-//     const response = await axios({
-//       url: `${BASE_URL}/stories/${storyId}`,
-//       method: 'PATCH',
-//       data: {
-//         token: token,
-//         story: {
-//           author: updatedFields[0],
-//           // title: updatedTitle,
-//           // url: updatedUrl
-//         }
-//       }
-//     });
-//     console.log(response);
-//     return response.data;
+    //Show success message, a work around for not being
+    //able to update the story fields just the way I wanted to
+    //I'll just have to be fine for now with reloading to the main 
+    //page
+    let showSuccessMsg = false;
 
-//   }
-}
+    const token = this.loginToken;
+    console.log(updatedFields[0]);
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'PATCH',
+      data: {
+        token: token,
+        story: {
+          author: updatedFields[0],
+          // title: updatedTitle,
+          // url: updatedUrl
+        }
+      }
+    });
+    console.log(response);
+    if(response.status == 200) {
+      showSuccessMsg = true;
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
+    }
+    return response.data;
+
+  }
+} 

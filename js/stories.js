@@ -99,10 +99,9 @@ function putMyStoriesOnPage() {
   }
     
   const removeIcon = `<i class="fa-solid fa-trash" id="rmv-icon"></i>`;
-  const editIcon = `<i class="fa-solid fa-file-pen edit-icon"></i>`;
-
+  
   $(".story-hostname").after(removeIcon);
-  $("li").prepend(editIcon);
+
   $allStoriesList.show();
 }
 
@@ -186,29 +185,3 @@ function showEditForm(evt) {
 }
 
 $allStoriesList.on("click", ".edit-icon", showEditForm);
-
-/** Update user's own stories with new author, title, or url */
-async function editOwnStory( evt ){
-  console.debug("EditOwnStory");
-  const storyId = $(evt.target).parent().attr("id");
-  const updatedAuthor = $("#story-author").val();
-  const updatedTitle = $("#story-title").val();
-  const updatedUrl = $("#story-url").val();
-
-  const edittedStory = await currentUser.updateStory(storyId, updatedAuthor);
-  console.log(edittedStory.story.storyId);
-
-  for(let i = 0; i <= currentUser.ownStories.length; i++){
-    if(currentUser.ownStories[i].storyId == edittedStory.story.storyId){
-      console.log(i);
-      currentUser.ownStories[i] = edittedStory;
-      break;
-    }
-    
-  }
-  //temporarily update field directly my stories
-  $(evt.target).parent().children("small .story-author").val("updatedAuthor"); 
-
-}
-
-$allStoriesList.on("submit", editOwnStory);
